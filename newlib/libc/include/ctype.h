@@ -44,6 +44,52 @@ SUCH DAMAGE.
 
 _BEGIN_STD_C
 
+#if defined(CONDITIONAL_CTYPE)
+static __inline int isalnum(int c) {
+	return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+}
+
+static __inline int isalpha(int c) {
+	return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+}
+
+static __inline int iscntrl(int c) {
+	return (c >= '\0' && c <= '\x1f') || (c == '\x7f');
+}
+
+static __inline int isdigit(int c) {
+	return (c >= '0' && c <= '9');
+}
+
+static __inline int isgraph(int c) {
+	return (c >= '!' && c <= '~');
+}
+
+static __inline int islower(int c) {
+	return (c >= 'a' && c <= 'z');
+}
+
+static __inline int isprint(int c) {
+	return (c >= ' ' && c <= '~');
+}
+
+static __inline int ispunct(int c) {
+	return (c >= '!' && c <= '/') || (c >= ':' && c <= '@') || (c >= '[' && c <= '`') || (c >= '{' && c <= '~');
+}
+
+static __inline int isspace(int c) {
+	return (c >= '\t' && c <= '\r') || (c == ' ');
+}
+
+static __inline int isupper(int c) {
+	return (c >= 'A' && c <= 'Z');
+}
+
+static __inline int isxdigit(int c) {
+	return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
+}
+
+#else
 int isalnum (int __c);
 int isalpha (int __c);
 int iscntrl (int __c);
@@ -55,11 +101,12 @@ int ispunct (int __c);
 int isspace (int __c);
 int isupper (int __c);
 int isxdigit (int __c);
+#endif
 int tolower (int __c);
 int toupper (int __c);
 
 #if  __ISO_C_VISIBLE >= 1999
-#ifdef _DEFINING_ISBLANK
+#if defined(_DEFINING_ISBLANK) && !defined(CONDITIONAL_CTYPE)
 int isblank(int c);
 #else
 static __inline int isblank(int c) {
